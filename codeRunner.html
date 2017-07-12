@@ -1,0 +1,236 @@
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.12.4.min.js"></script>
+
+
+<style>
+
+body{
+  margin: 0;
+  padding: 0;
+
+}
+#header{
+width: 100%;
+height: 40px;
+background-color: #e0e0e0;
+border-bottom: 1px solid grey;
+cursor: pointer;
+}
+
+#logo{
+  font-family: fantasy;
+  padding: 8px 0 0 20px;
+  font-size: 1.2em;
+  float: left;
+}
+
+#button{
+  float: right;
+  padding: 8px 25px 0 0;
+}
+#run{
+  font-size: 1.2em;
+  font-family: monospace;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+#toggles{
+  list-style: none;
+  width: 204.9px;
+  margin: 0 auto;
+  border: 1px solid grey;
+  border-radius: 5px;
+  height: 27px;
+  padding: 0;
+  position: relative;
+  top: 5px;
+}
+
+#toggles li{
+  float: left;
+  border-right: 1px solid grey;
+  padding: 5px 9px;
+  font-size: 1em;
+}
+
+.clear{
+  clear: both;
+}
+
+.codecontainer{
+
+  width: 50%;
+  float: left;
+  position: relative;
+
+}
+
+.codecontainer textarea{
+  width: 100%;
+height: 96%;
+border: none;
+border-right: 1px solid skyblue;
+font-family: monotype;
+font-size: 1.1em;
+padding: 5px;
+margin-top: 5px;
+}
+
+
+.codelabel{
+position: absolute;
+right:0px;
+border-right: 1px solid skyblue;
+padding-right: 15px;
+font-weight: bold;
+height: 25px;
+}
+
+#CSS, #JS{
+  display: none;
+}
+
+iframe{
+  height:94%;
+  position: relative;
+  left: 10px;
+  width: 97%;
+  border: none;
+}
+
+.selected{
+  background-color: grey;
+  height: 17px;
+}
+
+#footer{
+  border-top: 1px solid grey;
+  height: 25px;
+  width: 100%;
+  position:absolute;
+}
+
+#footer p{
+  padding: 0;
+  margin: 0;
+  padding-left: 15px;
+  padding-top: 3px;
+}
+
+.noneselected{
+  display: none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<div id="header">
+<div id="logo">
+  CodePlayer
+</div>
+
+<div id="button">
+<button id="run">Run</button>
+</div>
+
+<ul id="toggles">
+
+  <li class="toggle selected">HTML</li>
+  <li class="toggle">CSS</li>
+  <li class="toggle">JS</li>
+  <li class="toggle selected" style="border:none">Result</li>
+</ul>
+</div>
+
+
+
+<div class="clear"></div>
+
+<div class="noneselected"><h3>Empty Division!! <br/>Please Select From Menu Above....^</h3></div>
+
+<div class="codecontainer" id="HTML">
+  <div class="codelabel">HTML</div>
+  <br/>
+  <textarea id="htmlcode" class="area"></textarea>
+</div>
+
+<div class="codecontainer" id="CSS">
+  <div class="codelabel">CSS</div>
+  <br/>
+  <textarea id="csscode" class="area"></textarea>
+</div>
+
+<div class="codecontainer" id="JS">
+  <div class="codelabel">JS</div>
+  <br/>
+  <textarea id="jscode" class="area"></textarea>
+</div>
+
+
+<div class="codecontainer" id="Result">
+  <div class="codelabel" style="border-right:none;">Result</div>
+  <br/>
+  <iframe id="resultframe" ></iframe>
+  </div>
+</div>
+<div class="clear"></div>
+<div id="footer"><p>&copy; Copyright 2016</p></div>
+
+  <script>
+  var wheight=$(window).height();
+  var headerheight=$("#header").height();
+  var codeheight=wheight-headerheight-65;
+  $(".codecontainer").height(codeheight+"px");
+
+$(".toggle").click(function(){
+
+    $(this).toggleClass("selected");
+    var activediv=$(this).html();
+    $("#"+activediv).toggle();
+
+    var showingdivs=$(".codecontainer").filter(function(){
+      return($(this).css("display")!="none");
+    }).length;
+
+    if(showingdivs==0){
+      $(".noneselected").css("display","block");
+      $(".noneselected").height(87+"%");
+      $(".noneselected").width(100+"%");
+    }else{
+      $(".noneselected").hide();
+      $(".noneselected").height(0+"%");
+      $(".noneselected").width(0+"%");
+
+    var width=100/showingdivs;
+    $(".codecontainer").width(width+"%");
+}
+});
+
+$("#run").click(function(){
+
+  setInterval(function(){
+    $("iframe").contents().find("html").html('<style>'+$("#csscode").val()+'</style>'+$("#htmlcode").val());
+      document.getElementById("resultframe").contentWindow.eval($("#jscode").val());
+  },1000);
+
+});
+
+$("#logo").click(function(){
+
+  location.reload();
+});
+
+  </script>
+
+</body>
+
+</html>
